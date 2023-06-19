@@ -19,25 +19,24 @@ function setCanvasSize(){
     canvas.setAttribute("width", canvasSize);
     canvas.setAttribute("height", canvasSize);
 
-    elementsSize = canvasSize / 10;
+    elementsSize = canvasSize / 10 - 2;
 
     startGame();
 }
 
 function startGame(){
     game.font = elementsSize + "px Verdana"
-    game.textAling = "end";
+    game.textAlign = "end";
+    
+    const map = maps[2];
+    let mapsRows = map.trim().split('\n');
+    let mapsCols = mapsRows.map(item => item.trim().split(""));
 
-    for(let i=0; i<=10; i++){
-        game.fillText(emojis['X'], elementsSize, elementsSize * i);
+    console.log(mapsCols);
+
+    for(let row=1; row <=10; row++){
+        for(let col=1; col <=10; col++){
+            game.fillText(emojis[mapsCols[row - 1][col - 1]], elementsSize * col, elementsSize * row);
+        }
     }
-    //Metodos y propiedades de estilo para retangulos
-    // game.fillRect(0, 50, 100, 100);
-    // game.clearRect(50, 50, 50, 50);
-
-    //Metodos y propiedades de estilo para texto
-    // game.font = "48px roboto";
-    // game.fillStyle = "limegreen";
-    // game.textAlign = "center";
-    // game.fillText("Platzo", 10, 50);
 }

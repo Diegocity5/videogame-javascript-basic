@@ -17,6 +17,7 @@ const giftPosition = {
   x: undefined,
   y: undefined,
 };
+let enemyPositions = [];
 
 window.addEventListener("load", setCanvasSize);
 window.addEventListener("resize", setCanvasSize);
@@ -44,6 +45,7 @@ function startGame() {
   const mapsRows = map.trim().split("\n");
   const mapsRowCols = mapsRows.map((item) => item.trim().split(""));
 
+  enemyPositions = [];
   game.clearRect(0, 0, canvasSize, canvasSize);
 
   mapsRowCols.forEach((row, rowI) => {
@@ -52,16 +54,20 @@ function startGame() {
       const posX = elementsSize * (colI + 1);
       const posY = elementsSize * (rowI + 1);
 
+
       if (col == 'O') {
           if(!playerPosition.x && !playerPosition.y){
             playerPosition.x = posX;
             playerPosition.y = posY;
-            console.log({playerPosition});
           }
         }else if(col == 'I'){
           giftPosition.x = posX;
           giftPosition.y = posY;
-          console.log({giftPosition});
+        }else if(col == 'X'){
+          enemyPositions.push({
+            x: posX,
+            y: posY,
+          })
         }
       
       game.fillText(emoji, posX, posY);
@@ -79,7 +85,12 @@ function movePlayer(){
   if (giftCollision) {
     console.log('Subiste de nisvel!');
   }
+
+  const enemyCollision = enemyPositions.some(item => item.x.toFixed(3) == playerPosition.x.toFixed(3) && item.y.toFixed(3) == playerPosition.y.toFixed(3))
   
+  if(enemyCollision){
+    console.log("Chocaste con una bomba")
+}
   game.fillText(emojis['PLAYER'], playerPosition.x, playerPosition.y);
 }
 
@@ -107,7 +118,6 @@ function moveByKeys(event) {
 }
 
 function moveToUp(){
-  console.log("move up");
   if((playerPosition.y - elementsSize) < elementsSize){
     console.log("OUT");
   }else{
@@ -116,7 +126,6 @@ function moveToUp(){
   }
 }
 function moveToLeft(){
-  console.log("move left");
   if((playerPosition.x - elementsSize) < elementsSize){
     console.log("OUT");
   }else{
@@ -125,7 +134,6 @@ function moveToLeft(){
   }
 }
 function moveToRight(){
-  console.log("move right");
   if((playerPosition.x  + elementsSize) > canvasSize){
     console.log("OUT");
   }else{
@@ -134,7 +142,6 @@ function moveToRight(){
   }
 }
 function moveToDown(){
-  console.log("move down");
   if((playerPosition.y  + elementsSize) > canvasSize){
     console.log("OUT");
   }else{

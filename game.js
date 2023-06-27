@@ -8,6 +8,7 @@ const btnDown = document.querySelector("#down");
 
 let canvasSize; //Size of canvas
 let elementsSize; //Size elements into canvas
+let level = 0;
 
 const playerPosition = {
   x: undefined,
@@ -41,7 +42,13 @@ function startGame() {
   game.font = elementsSize + "px Verdana";
   game.textAlign = "end";
 
-  const map = maps[0];
+  const map = maps[level];
+
+  if(!map){
+    gameWin();
+    return;
+  }
+
   const mapsRows = map.trim().split("\n");
   const mapsRowCols = mapsRows.map((item) => item.trim().split(""));
 
@@ -83,15 +90,25 @@ function movePlayer(){
   const giftCollision = giftCollisionX && giftCollisionY;
   
   if (giftCollision) {
-    console.log('Subiste de nisvel!');
+    levelWin();
   }
 
   const enemyCollision = enemyPositions.some(item => item.x.toFixed(3) == playerPosition.x.toFixed(3) && item.y.toFixed(3) == playerPosition.y.toFixed(3))
   
   if(enemyCollision){
-    console.log("Chocaste con una bomba")
+    window.history.go();
 }
   game.fillText(emojis['PLAYER'], playerPosition.x, playerPosition.y);
+}
+
+function levelWin(){
+  console.log('Subiste de nivel :)!');
+  level++;
+  startGame();
+}
+
+function gameWin(){
+  console.log("Terminaste el juego");
 }
 
 document.addEventListener("keyup", moveByKeys);

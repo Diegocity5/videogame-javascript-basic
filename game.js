@@ -7,6 +7,8 @@ const btnRight = document.querySelector("#right");
 const btnDown = document.querySelector("#down");
 const spanLives = document.querySelector("#lives");
 const spanTime =  document.querySelector("#time");
+const spanRecord = document.querySelector('#record');
+const pResult = document.querySelector('#result');
 
 
 let canvasSize; //Size of canvas
@@ -53,13 +55,14 @@ function startGame(){
   const map = maps[level];
 
   if(!map){
-    gameWin();
+    gameWinAndSetRecord();
     return;
   }
 
   if (!timeStart) {
     timeStart = Date.now();
     timeInterval = setInterval(showTime, 100);
+    showRecord();
   }
 
   const mapsRows = map.trim().split("\n");
@@ -135,16 +138,36 @@ function levelFail(){
   playerPosition.y = undefined;
   startGame();
 }
-function gameWin(){
-  console.log("Terminaste el juego");
+function gameWinAndSetRecord(){
   clearInterval(timeInterval);
+
+  const recordTime = localStorage.getItem('record_time');
+  const playerTime = Date.now() - timeStart;
+
+  if (recordTime) {
+    if (recordTime >= playerTime) {
+      localStorage.setItem('record_time', playerTime);
+      pResult.textContent = "Congratulations you winner :)";
+    } else {
+      pResult.textContent = "Lo siento, no superaste el records";
+    }
+  } else {
+    localStorage.setItem('record_time', playerTime);
+    pResult.textContent = "Primera vez? Muy bien, pero ahora trata de superar tu tiempo";
+  }
+
 }
+
 function showLives(){
   const hearts = emojis["HEART"].repeat(lives);
   spanLives.textContent = hearts;
 }
 function showTime() {
-  spanTime.textContent = Date.now() - timeStart;
+  timePlayer = Date.now() - timeStart
+  spanTime.textContent = timePlayer;
+}
+function showRecord() {
+  spanRecord.textContent = localStorage.getItem('record_time');
 }
 
 document.addEventListener("keyup", moveByKeys);
@@ -169,7 +192,6 @@ function moveByKeys(event) {
       break;
   }
 }
-
 function moveToUp(){
   if((playerPosition.y - elementsSize) < elementsSize){
     console.log("OUT");

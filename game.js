@@ -11,8 +11,8 @@ const spanRecord = document.querySelector('#record');
 const pResult = document.querySelector('#result');
 
 
-let canvasSize; //Size of canvas
-let elementsSize; //Size elements into canvas
+let canvasSize;
+let elementsSize;
 let level = 0;
 let lives = 3;
 
@@ -69,7 +69,6 @@ function startGame(){
   const mapsRowCols = mapsRows.map((item) => item.trim().split(""));
 
   showLives();
-  // showTime();
 
   enemyPositions = [];
   game.clearRect(0, 0, canvasSize, canvasSize);
@@ -120,7 +119,7 @@ function movePlayer(){
 }
 
 function levelWin(){
-  console.log('Subiste de nivel :)!');
+  console.log('New level :)!');
   level++;
   startGame();
 }
@@ -147,13 +146,13 @@ function gameWinAndSetRecord(){
   if (recordTime) {
     if (recordTime >= playerTime) {
       localStorage.setItem('record_time', playerTime);
-      pResult.textContent = "Congratulations you winner :)";
+      pResult.textContent = "Congratulations on winning";
     } else {
-      pResult.textContent = "Lo siento, no superaste el records";
+      pResult.textContent = "Sorry you didn't beat the record.";
     }
   } else {
     localStorage.setItem('record_time', playerTime);
-    pResult.textContent = "Primera vez? Muy bien, pero ahora trata de superar tu tiempo";
+    pResult.textContent = "Okay, but you can get through the time";
   }
 
 }

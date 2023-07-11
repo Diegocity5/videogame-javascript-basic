@@ -1,3 +1,8 @@
+:root{
+  --border-color: #ff6600;
+  --button-color: #fdef05;
+  --canvas-bg-color: #feff9d;
+}
 body {
   background-color: indigo;
   color: #fff;
@@ -14,9 +19,9 @@ body {
   width: 100vw;
 }
 canvas {
-  border: 4px solid #ff6600;
+  border: 4px solid var(--border-color);
   border-radius: 8px;
-  background-color: #feff9d;
+  background-color: var(--canvas-bg-color);
 }
 .btns {
   display: flex;
@@ -26,13 +31,14 @@ canvas {
   width: 100%;
 }
 button {
-  background-color: #fdef05;
+  background-color: var(--button-color);
   border-radius: 8px;
-  border-color: #ff6600;
+  border-color: var(--border-color);
   font-family: inherit;
   margin: 0;
   padding: 5px 20px;
   width: 100px;
+  cursor: pointer;
 }
 button:not(:last-child) {
   margin-right: 10px;

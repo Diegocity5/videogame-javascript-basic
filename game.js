@@ -140,7 +140,7 @@ function levelFail(){
   if(lives <= 0){
     level = 0;
     lives = 3;
-    timeStart = undefined;
+    timeStart;
   }
   playerPosition.x = undefined;
   playerPosition.y = undefined;

@@ -1,6 +1,7 @@
 //USE API CANVAS
 const canvas = document.querySelector("#game");
 const game = canvas.getContext("2d");
+
 const btnUp = document.querySelector("#up");
 const btnLeft = document.querySelector("#left");
 const btnRight = document.querySelector("#right");
@@ -39,11 +40,12 @@ function fixNumber(n){
 
 function setCanvasSize(){
   if (window.innerHeight > window.innerWidth) {
-    canvasSize = window.innerWidth * 0.7;
+    canvasSize = window.innerWidth * 0.75;
   } else {
-    canvasSize = window.innerHeight * 0.7;
+    canvasSize = window.innerHeight * 0.75;
   }
 
+  canvasSize = fixNumber(canvasSize);
   canvas.setAttribute("width", canvasSize);
   canvas.setAttribute("height", canvasSize);
 
@@ -51,15 +53,15 @@ function setCanvasSize(){
 
   playerPosition.x = undefined;
   playerPosition.y = undefined;
+
   startGame();
 }
 
 function startGame(){
-  game.font = elementsSize + "px Verdana";
+  game.font = elementsSize * 0.8 + "px Verdana";
   game.textAlign = "end";
 
   const map = maps[level];
-
   if(!map){
     gameWinAndSetRecord();
     return;
@@ -75,10 +77,9 @@ function startGame(){
   const mapsRowCols = mapsRows.map((item) => item.trim().split(""));
 
   showLives();
-  // showTime();
 
   enemyPositions = [];
-  game.clearRect(0, 0, canvasSize, canvasSize);
+  game.clearRect(0,0, canvasSize,canvasSize);
 
   mapsRowCols.forEach((row, rowI) => {
     row.forEach((col, colI) => {
@@ -112,26 +113,28 @@ function movePlayer(){
   const giftCollisionX = playerPosition.x.toFixed(3) == giftPosition.x.toFixed(3);
   const giftCollisionY = playerPosition.y.toFixed(3) == giftPosition.y.toFixed(3);
   const giftCollision = giftCollisionX && giftCollisionY;
-  
+
   if (giftCollision) {
     levelWin();
   }
 
-  const enemyCollision = enemyPositions.some(item => item.x.toFixed(3) == playerPosition.x.toFixed(3) && item.y.toFixed(3) == playerPosition.y.toFixed(3))
-  
+  const enemyCollision = enemyPositions.some(enemy => enemy.x.toFixed(3) == playerPosition.x.toFixed(3) && enemy.y.toFixed(3) == playerPosition.y.toFixed(3))
+
   if(enemyCollision){
-    levelFail();
+    setTimeout(levelFail, 100);
+    game.fillText(emojis['BOMB_COLLISION'], playerPosition.x, playerPosition.y);
+    return;
   }
   game.fillText(emojis['PLAYER'], playerPosition.x, playerPosition.y);
 }
 
 function levelWin(){
-  console.log('Subiste de nivel :)!');
+  console.log('Level up :)!');
   level++;
   startGame();
 }
 function levelFail(){
-  console.log("Chocaste contra un enemigo");
+  console.log("Enemy");
   lives--;
 
   if(lives <= 0){
@@ -139,12 +142,12 @@ function levelFail(){
     lives = 3;
     timeStart = undefined;
   }
-
   playerPosition.x = undefined;
   playerPosition.y = undefined;
   startGame();
 }
 function gameWinAndSetRecord(){
+  console.log('¡Game Finished!');
   clearInterval(timeInterval);
 
   const recordTime = localStorage.getItem('record_time');
@@ -153,13 +156,13 @@ function gameWinAndSetRecord(){
   if (recordTime) {
     if (recordTime >= playerTime) {
       localStorage.setItem('record_time', playerTime);
-      pResult.textContent = "Congratulations you winner :)";
+      pResult.textContent = "You made a new record! Congratulations.";
     } else {
-      pResult.textContent = "Lo siento, no superaste el records";
+      pResult.textContent = "Sorry, this is not a record 😓";
     }
   } else {
     localStorage.setItem('record_time', playerTime);
-    pResult.textContent = "Primera vez? Muy bien, pero ahora trata de superar tu tiempo";
+    pResult.textContent = "First time playing? Try to get a new record 😎";
   }
 
 }
@@ -200,7 +203,7 @@ function moveByKeys(event) {
 }
 function moveToUp(){
   if((playerPosition.y - elementsSize) < elementsSize){
-    console.log("OUT");
+    console.log("Out");
   }else{
     playerPosition.y -= elementsSize;
     startGame();
